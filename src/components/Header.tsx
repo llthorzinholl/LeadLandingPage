@@ -37,7 +37,7 @@ export const Header = () => {
               className="flex items-center h-20"
             >
               <img
-                src="./src/components/assets/logo.png"
+                src="./logo.png"
                 alt="LeadSafe Logo"
                 className="h-40 w-auto object-contain"
               />

@@ -74,7 +74,7 @@ export const Hero = () => {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img 
-                src="./src/components/assets/hero.png" 
+                src="./hero.png" 
                 alt="Lead paint removal professional" 
                 className="w-full h-auto object-cover"
                 referrerPolicy="no-referrer"

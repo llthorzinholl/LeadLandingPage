@@ -11,7 +11,7 @@ export const Footer = () => {
           {/* LOGO */}
           <div className="flex items-center justify-center md:justify-start gap-0">
               <img
-                src="./src/components/assets/logoT.png"
+                src="./logoT.png"
                 alt="LeadSafe Icon"
                 className="h-20 w-auto object-contain"
               />

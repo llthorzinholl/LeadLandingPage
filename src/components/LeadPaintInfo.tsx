@@ -63,13 +63,13 @@ export const LeadPaintInfo = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <img 
-                  src="./src/components/assets/jobs.png" 
+                  src="./jobs.png" 
                   alt="Peeling lead paint hazard" 
                   className="rounded-3xl shadow-lg object-cover w-full h-64"
                   referrerPolicy="no-referrer"
                 />
                 <img 
-                  src="./src/components/assets/jobs3.png" 
+                  src="./jobs3.png" 
                   alt="Lead testing kit" 
                   className="rounded-3xl shadow-lg object-cover w-full h-48"
                   referrerPolicy="no-referrer"
@@ -77,13 +77,13 @@ export const LeadPaintInfo = () => {
               </div>
               <div className="space-y-4 pt-8">
                 <img 
-                  src="./src/components/assets/jobs4.png" 
+                  src="./jobs4.png" 
                   alt="HEPA vacuum for lead dust" 
                   className="rounded-3xl shadow-lg object-cover w-full h-48"
                   referrerPolicy="no-referrer"
                 />
                 <img 
-                  src="./src/components/assets/jobs2.png" 
+                  src="./jobs2.png" 
                   alt="Clean safe home" 
                   className="rounded-3xl shadow-lg object-cover w-full h-64"
                   referrerPolicy="no-referrer"
