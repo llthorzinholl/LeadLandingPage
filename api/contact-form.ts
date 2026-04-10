@@ -1,33 +1,33 @@
 import { neon } from "@neondatabase/serverless";
 
-export default async function handler(req: any, res: any) {
+export async function POST(request: Request) {
   try {
-    if (req.method !== "POST") {
-      return res.status(405).json({
-        success: false,
-        error: "Method not allowed",
-      });
-    }
-
     const databaseUrl = process.env.DATABASE_URL;
 
     if (!databaseUrl) {
-      return res.status(500).json({
-        success: false,
-        error: "DATABASE_URL is missing",
-      });
+      return Response.json(
+        {
+          success: false,
+          error: "DATABASE_URL is missing",
+        },
+        { status: 500 }
+      );
+    }
+
+    const body = await request.json();
+    const { name, email, propertyType, message } = body ?? {};
+
+    if (!name || !email || !message) {
+      return Response.json(
+        {
+          success: false,
+          error: "Missing required fields",
+        },
+        { status: 400 }
+      );
     }
 
     const sql = neon(databaseUrl);
-
-    const { name, email, propertyType, message } = req.body ?? {};
-
-    if (!name || !email || !message) {
-      return res.status(400).json({
-        success: false,
-        error: "Missing required fields",
-      });
-    }
 
     await sql`
       INSERT INTO contact_messages (
@@ -44,16 +44,22 @@ export default async function handler(req: any, res: any) {
       )
     `;
 
-    return res.status(200).json({
-      success: true,
-      message: "Form submitted successfully",
-    });
+    return Response.json(
+      {
+        success: true,
+        message: "Form submitted successfully",
+      },
+      { status: 200 }
+    );
   } catch (error: any) {
     console.error("API /api/contact-form error:", error);
 
-    return res.status(500).json({
-      success: false,
-      error: error?.message || "Internal server error",
-    });
+    return Response.json(
+      {
+        success: false,
+        error: error?.message || "Internal server error",
+      },
+      { status: 500 }
+    );
   }
 }

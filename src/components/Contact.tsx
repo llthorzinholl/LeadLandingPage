@@ -32,11 +32,11 @@ export const Contact = () => {
     setStatus('sending');
 
     try {
-      const res = await fetch('/api/contact-form', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch("/api/contact-form", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
 
       const contentType = res.headers.get('content-type') || '';
       const isJson = contentType.includes('application/json');
