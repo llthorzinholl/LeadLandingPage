@@ -10,7 +10,10 @@ const sql = neon(databaseUrl);
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
-    return res.status(405).json({ success: false, error: "Method not allowed" });
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed",
+    });
   }
 
   try {
@@ -27,14 +30,14 @@ export default async function handler(req: any, res: any) {
       INSERT INTO contact_messages (
         name,
         email,
-        property_type,
-        message
+        message,
+        source
       )
       VALUES (
         ${name},
         ${email},
-        ${propertyType || null},
-        ${message}
+        ${message},
+        ${propertyType || 'website_form'}
       )
     `;
 
