@@ -40,7 +40,6 @@ export const Contact = () => {
 
       const contentType = res.headers.get('content-type') || '';
       const isJson = contentType.includes('application/json');
-
       const responseData = isJson ? await res.json() : await res.text();
 
       if (!res.ok) {

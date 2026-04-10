@@ -26,26 +26,34 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({
         success: false,
         error: "Missing required fields",
-        received: { name, email, propertyType, message },
       });
     }
 
-    const dbTest = await sql`SELECT 1 AS ok`;
+    await sql`
+      INSERT INTO contact_messages (
+        name,
+        email,
+        message,
+        source
+      )
+      VALUES (
+        ${name},
+        ${email},
+        ${message},
+        ${propertyType || 'website_form'}
+      )
+    `;
 
     return res.status(200).json({
       success: true,
-      debug: {
-        databaseConnection: dbTest,
-        received: { name, email, propertyType, message },
-      },
+      message: "Form submitted successfully",
     });
   } catch (error: any) {
-    console.error("DEBUG /api/contact-form error:", error);
+    console.error("API /api/contact-form error:", error);
 
     return res.status(500).json({
       success: false,
       error: error?.message || "Internal server error",
-      details: String(error),
     });
   }
 }
