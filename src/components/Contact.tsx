@@ -12,11 +12,13 @@ export const Contact = () => {
     message: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,9 +38,24 @@ export const Contact = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get('content-type') || '';
+      const isJson = contentType.includes('application/json');
 
-      if (data.success) {
+      const responseData = isJson ? await res.json() : await res.text();
+
+      if (!res.ok) {
+        console.error('API error response:', responseData);
+        setStatus('idle');
+        alert('Something went wrong while sending the form');
+        return;
+      }
+
+      if (
+        isJson &&
+        responseData &&
+        typeof responseData === 'object' &&
+        responseData.success
+      ) {
         setStatus('success');
         setFormData({
           name: '',
@@ -46,12 +63,14 @@ export const Contact = () => {
           propertyType: 'Residential',
           message: '',
         });
-      } else {
-        setStatus('idle');
-        alert('Something went wrong');
+        return;
       }
+
+      console.error('Unexpected server response:', responseData);
+      setStatus('idle');
+      alert('Unexpected server response');
     } catch (error) {
-      console.error(error);
+      console.error('Submit error:', error);
       setStatus('idle');
       alert('Error sending message');
     }
@@ -60,10 +79,9 @@ export const Contact = () => {
   return (
     <section id="contact" className="py-24 bg-slate-900 text-white overflow-hidden relative">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-emerald-600/10 blur-[120px]" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          
           <div>
             <h2 className="text-4xl font-bold tracking-tight mb-8">
               Protect your health today. <br />
@@ -110,7 +128,8 @@ export const Contact = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">Message Sent!</h3>
                 <p className="text-slate-600">We will get back to you shortly.</p>
-                <button 
+                <button
+                  type="button"
                   onClick={() => setStatus('idle')}
                   className="mt-8 text-emerald-600 font-bold hover:underline"
                 >
@@ -119,7 +138,6 @@ export const Contact = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-
                 <div className="grid sm:grid-cols-2 gap-6">
                   <input
                     name="name"
@@ -161,14 +179,14 @@ export const Contact = () => {
                   className="w-full bg-slate-50 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-emerald-500"
                 />
 
-                <button 
+                <button
+                  type="submit"
                   disabled={status === 'sending'}
                   className="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-500 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {status === 'sending' ? 'Sending...' : 'Request Quote'}
                   <Send className="w-5 h-5" />
                 </button>
-
               </form>
             )}
           </motion.div>
