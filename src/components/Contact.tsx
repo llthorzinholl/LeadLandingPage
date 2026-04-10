@@ -32,42 +32,43 @@ export const Contact = () => {
     setStatus('sending');
 
     try {
-      const res = await fetch("/api/contact-form", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
-          });
+     const res = await fetch('/api/contact-form', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+            });
 
       const contentType = res.headers.get('content-type') || '';
       const isJson = contentType.includes('application/json');
+      
       const responseData = isJson ? await res.json() : await res.text();
-
+      
       if (!res.ok) {
-        console.error('API error response:', responseData);
-        setStatus('idle');
-        alert('Something went wrong while sending the form');
-        return;
-      }
+               console.error('API error response:', responseData);
+               setStatus('idle');
+               alert(typeof responseData === 'string' ? responseData : 'Something went wrong while sending the form');
+               return;
+             }
 
-      if (
-        isJson &&
-        responseData &&
-        typeof responseData === 'object' &&
-        responseData.success
-      ) {
-        setStatus('success');
-        setFormData({
-          name: '',
-          email: '',
-          propertyType: 'Residential',
-          message: '',
-        });
-        return;
-      }
-
-      console.error('Unexpected server response:', responseData);
-      setStatus('idle');
-      alert('Unexpected server response');
+          if (
+            isJson &&
+            responseData &&
+            typeof responseData === 'object' &&
+            responseData.success
+          ) {
+            setStatus('success');
+            setFormData({
+              name: '',
+              email: '',
+              propertyType: 'Residential',
+              message: '',
+            });
+            return;
+          }
+          
+          console.error('Unexpected server response:', responseData);
+          setStatus('idle');
+          alert('Unexpected server response');
     } catch (error) {
       console.error('Submit error:', error);
       setStatus('idle');
