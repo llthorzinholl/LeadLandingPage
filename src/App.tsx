@@ -68,7 +68,7 @@ export default function App() {
                 <p className="text-sm text-slate-500 font-medium uppercase tracking-widest">Years Experience</p>
               </div>
               <div>
-                <p className="text-4xl font-bold text-slate-900 mb-2">2.5k</p>
+                <p className="text-4xl font-bold text-slate-900 mb-2">Industry Proven</p>
                 <p className="text-sm text-slate-500 font-medium uppercase tracking-widest">Projects Completed</p>
               </div>
               <div>
