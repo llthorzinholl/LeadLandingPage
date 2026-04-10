@@ -40,7 +40,7 @@ export default async function handler(req: any, res: any) {
         ${name},
         ${email},
         ${message},
-        ${propertyType || 'website_form'}
+        ${propertyType || "website_form"}
       )
     `;
 
