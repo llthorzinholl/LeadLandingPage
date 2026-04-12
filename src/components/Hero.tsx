@@ -1,8 +1,65 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, ShieldCheck, AlertTriangle } from 'lucide-react';
+import {
+  ArrowRight,
+  ShieldCheck,
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 
 export const Hero = () => {
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const updateSliderPosition = useCallback((clientX: number) => {
+    const container = sliderRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = (x / rect.width) * 100;
+    const clamped = Math.max(0, Math.min(100, percentage));
+
+    setSliderPosition(clamped);
+  }, []);
+
+  const handleMouseDown = () => {
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      if (!isDragging) return;
+      updateSliderPosition(event.clientX);
+    },
+    [isDragging, updateSliderPosition]
+  );
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = useCallback(
+    (event: React.TouchEvent<HTMLDivElement>) => {
+      updateSliderPosition(event.touches[0].clientX);
+    },
+    [updateSliderPosition]
+  );
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
       <div className="absolute top-0 right-0 -z-10 w-1/2 h-full bg-slate-50 rounded-l-[100px]" />
@@ -68,14 +125,72 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="relative rounded-3xl overflow-hidden">
+            <div
+              ref={sliderRef}
+              className="relative rounded-3xl overflow-hidden select-none cursor-ew-resize"
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseLeave}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {/* Imagem de trás */}
               <img
-                src="./hero.jpg"
-                alt="Professional mould removal service"
-                className="w-full h-auto object-cover"
+                src="./heroB.webp"
+                alt="Before mould removal"
+                className="w-full h-auto object-cover pointer-events-none"
                 referrerPolicy="no-referrer"
+                draggable={false}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
+
+              {/* Imagem da frente mascarada */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
+                }}
+              >
+                <img
+                  src="./heroA.webp"
+                  alt="After mould removal"
+                  className="w-full h-full object-cover pointer-events-none"
+                  referrerPolicy="no-referrer"
+                  draggable={false}
+                />
+              </div>
+
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent pointer-events-none" />
+
+              {/* Labels */}
+              <div className="absolute top-4 left-4 z-20 bg-black/55 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full pointer-events-none">
+                Before
+              </div>
+
+              <div className="absolute top-4 right-4 z-20 bg-emerald-600/90 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full pointer-events-none">
+                After
+              </div>
+
+              {/* Linha divisória */}
+              <div
+                className="absolute top-0 bottom-0 z-20 w-[2px] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.08)] pointer-events-none"
+                style={{ left: `calc(${sliderPosition}% - 1px)` }}
+              />
+
+              {/* Botão do slider */}
+              <button
+                type="button"
+                aria-label="Drag to compare before and after"
+                onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
+                className="absolute top-1/2 z-30 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-white border border-slate-200 shadow-xl flex items-center justify-center touch-none"
+                style={{ left: `${sliderPosition}%` }}
+              >
+                <div className="flex items-center justify-center gap-0.5 text-slate-700">
+                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronRight className="w-4 h-4" />
+                </div>
+              </button>
             </div>
 
             <motion.div

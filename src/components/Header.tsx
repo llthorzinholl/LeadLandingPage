@@ -10,12 +10,11 @@ import { motion, AnimatePresence } from 'motion/react';
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  // 🔥 Smooth scroll with offset (header height)
   const handleScroll = (id: string) => {
     const element = document.getElementById(id);
     if (!element) return;
 
-    const headerOffset = 80; // altura do header (h-20 = 80px)
+    const headerOffset = 80;
     const elementPosition = element.getBoundingClientRect().top + window.scrollY;
     const offsetPosition = elementPosition - headerOffset;
 
@@ -24,25 +23,40 @@ export const Header = () => {
       behavior: 'smooth',
     });
 
-    setIsMenuOpen(false); // fecha mobile menu
+    setIsMenuOpen(false);
   };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
+
+          {/* Logo + Name */}
           <div className="flex items-center">
             <button
               onClick={() => handleScroll('top')}
-              className="flex items-center h-20"
+              className="flex items-center gap-3 h-20"
             >
               <img
-                src="./logo.png"
-                alt="LeadSafe Logo"
-                className="h-40 w-auto object-contain"
+                src="./logo.svg"
+                alt="Absolute Environmental Services"
+                className="h-10 w-auto object-contain"
               />
+
+              <span className="flex flex-col text-left leading-tight hidden sm:flex">
+                {/* Absolute */}
+                <span className="text-lg font-bold text-slate-900">
+                  Absolute
+                </span>
+              
+                {/* Environmental Services */}
+                <span className="text-sm font-semibold text-slate-900 -mt-[2px] leading-tight">
+                  Environmental <br />
+                  <span className="text-emerald-600">Services</span>
+                </span>
+              </span>
             </button>
-            </div>
+          </div>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
