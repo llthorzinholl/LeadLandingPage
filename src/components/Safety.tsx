@@ -60,7 +60,7 @@ export const Safety = () => {
           <div className="lg:w-1/2 relative">
             <div className="aspect-square rounded-[40px] overflow-hidden shadow-2xl rotate-3">
               <img 
-                src="./menVac.png" 
+                src="./menVac.webp" 
                 alt="Safety equipment and PPE" 
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
