@@ -212,12 +212,21 @@ export const Contact = () => {
         return;
       }
 
-      if (
+           if (
         isJson &&
         responseData &&
         typeof responseData === 'object' &&
         responseData.success
       ) {
+        // ✅ DISPARA TRACKER GOOGLE ADS (APENAS QUANDO DEU CERTO)
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          (window as any).gtag('event', 'conversion', {
+            send_to: 'AW-994192169/u511CIbluoUcEKnWiNoD',
+            value: 1.0,
+            currency: 'AUD',
+          });
+        }
+      
         setStatus('success');
         setErrors({});
         setFormData({
@@ -227,6 +236,7 @@ export const Contact = () => {
           propertyType: 'Residential',
           message: '',
         });
+      
         return;
       }
 
